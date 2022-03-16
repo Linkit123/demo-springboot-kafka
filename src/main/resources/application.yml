@@ -1,0 +1,31 @@
+server:
+  port: 9999
+#spring:
+#  kafka:
+#    listener:
+#      concurrency: 10
+#      type: batch
+spring:
+  kafka:
+    bootstrap-servers: localhost:29092
+    listener:
+      concurrency: 10
+      type: single
+#      ack-mode: manual_immediate
+    producer:
+      topic: topic-10p
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 3
+      acks: 1
+    consumer:
+      groupId: test-group-1
+      topic: topic-10p
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      #for listening to multiple topics
+      properties:
+        partition:
+          assignment:
+            strategy: org.apache.kafka.clients.consumer.RoundRobinAssignor
