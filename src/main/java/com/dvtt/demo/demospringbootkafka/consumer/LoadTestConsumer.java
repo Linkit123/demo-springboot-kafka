@@ -1,17 +1,14 @@
 package com.dvtt.demo.demospringbootkafka.consumer;
 
+import com.dvtt.demo.demospringbootkafka.constant.ApplicationConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,8 +24,8 @@ public class LoadTestConsumer {
         this.taskExecutor = taskExecutor;
     }
 
-//    @KafkaListener(topics = ApplicationConstant.TOPIC_NAME, groupId = ApplicationConstant.GROUP_ID_STRING)
-    @KafkaListener(topics = "#{'${spring.kafka.consumer.topic}'}")
+    @KafkaListener(topics = ApplicationConstant.TOPIC_NAME, groupId = ApplicationConstant.GROUP_ID)
+//    @KafkaListener(topics = "#{'${spring.kafka.consumer.topic}'}")
     public void loadTestConsumer(String data,
                                  @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
                                  @Header(KafkaHeaders.OFFSET) int offsets) {

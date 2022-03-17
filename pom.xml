@@ -10,10 +10,10 @@
 	</parent>
 	<groupId>com.dvtt.demo</groupId>
 	<artifactId>demo-springboot-kafka</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>demo-springboot-kafka</name>
 	<description>springboot-kafka</description>
-	<packaging>war</packaging>
+<!--	<packaging>war</packaging>-->
 	<properties>
 		<java.version>11</java.version>
 	</properties>

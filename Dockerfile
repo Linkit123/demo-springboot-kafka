@@ -1,32 +1,26 @@
-FROM maven:3.8.3-openjdk-11-slim as build
+# our base build image
+FROM maven:3.8.4-jdk-11 as maven
 
-RUN mkdir -p /app/source && mkdir -p /app/log && mkdir -p /app/build && mkdir -p /target/dependency
+# copy the project files
+COPY ./pom.xml ./pom.xml
 
-COPY . /app/source/
+# build all dependencies
+RUN mvn dependency:go-offline -B
 
-WORKDIR /app/source/
-RUN mvn dependency:go-offline
+# copy your other files
+COPY ./src ./src
+
+# build for release
 RUN mvn clean package -DskipTests
 
-RUN cp /app/source/target/*.war /app/build/application.war
+# our final base image
+FROM adoptopenjdk/openjdk11:x86_64-alpine-jre-11.0.5_10
 
-RUN (cd /target/dependency; jar -xvf /app/build/application.war)
+# set deployment directory
+WORKDIR /my-project
 
-FROM eclipse-temurin:11.0.13_8-jre-alpine
+# copy over the built artifact from the maven image
+COPY --from=maven target/demo-springboot-kafka-*.jar ./app.jar
 
-# Create working folder in image
-RUN mkdir -p /app/lib && mkdir -p /app/META-INF && mkdir -p /target/dependency && mkdir -p /app/log
-
-# Copy file build
-COPY --from=build /target/dependency /target/dependency
-
-# Copy all source to working folder
-RUN cp -r /target/dependency/WEB-INF/lib/* /app/lib
-RUN cp -r /target/dependency/META-INF/* /app/META-INF
-RUN cp -r /target/dependency/WEB-INF/classes/* /app
-
-# Remove temp folder
-RUN rm -rf /target/dependency
-
-# Run this command when container start
-ENTRYPOINT java -Xms128m -Xmx2g com.dvtt.demo.demospringbootkafka.DemoSpringbootKafkaApplication
+# set the startup command to run your binary
+ENTRYPOINT ["java", "-jar", "app.jar"]
