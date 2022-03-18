@@ -43,7 +43,7 @@ services:
       - xpack.security.enabled=true
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - ELASTIC_PASSWORD=vexesanbay@123
+      - ELASTIC_PASSWORD=demo@123
       #develop mode
       - discovery.type=single-node
       #production mode: https://www.elastic.co/guide/en/elasticsearch/reference/7.0/docker.html#docker-cli-run-prod-mode
