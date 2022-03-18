@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class LoadTestConsumer {
 //    @KafkaListener(topics = "#{'${spring.kafka.consumer.topic}'}")
     public void loadTestConsumer(String data,
                                  @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
-                                 @Header(KafkaHeaders.OFFSET) int offsets) {
+                                 @Header(KafkaHeaders.OFFSET) int offsets, Acknowledgment acknowledgment) {
         var uuid = UUID.randomUUID().toString();
         try {
             log.info("----> START consume {}, offsets: {}, partition: {}, data: {}", uuid, offsets, partition, data);
@@ -40,7 +41,7 @@ public class LoadTestConsumer {
         } finally {
             log.info("----> END consume {}", uuid);
             //  manually acknowledgment
-//            acknowledgment.acknowledge();
+            acknowledgment.acknowledge();
         }
     }
 
