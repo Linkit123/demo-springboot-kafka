@@ -7,7 +7,7 @@ server:
 #      type: batch
 #spring:
 #  kafka:
-#    bootstrap-servers: 10.22.18.21:9092
+#    bootstrap-servers: localhost:29092
 #    listener:
 #      concurrency: 3
 #      type: single
